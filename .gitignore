@@ -1,0 +1,17 @@
+# personal voice — NEVER commit to the public repo
+reference/reference.WAV
+reference/reference.txt
+reference/*.wav
+reference/*.WAV
+
+# local junk
+__pycache__/
+*.pyc
+.venv/
+out/
+out_backup_*/
+_*.log
+*.log
+scripts.json*
+say.wav
+*.egg-info/
