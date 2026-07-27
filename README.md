@@ -15,7 +15,7 @@ Model: `Qwen/Qwen3-TTS-12Hz-1.7B-Base`, baked into the Docker image at build.
 | `handler.py` | RunPod serverless handler (voice clone + mastering chain) |
 | `Dockerfile` | Worker image: repo's own `qwen_tts` + baked model weights |
 | `qwen_tts/` | The TTS library (vendored upstream source) |
-| `reference/` | Reference voice slot — **not committed** in the public repo |
+| `reference/` | Reference voice (committed; baked into the image) |
 | `scripts/tts_client.py` | Batch client: `lines.json` → `<id>.mp3` + `manifest.json` |
 | `scripts/runpod_api.py` | Ops helper: `health`, `say` smoke test, pod start/stop |
 | `local/` | The original local-GPU scripts this endpoint replicates |
@@ -26,16 +26,11 @@ Model: `Qwen/Qwen3-TTS-12Hz-1.7B-Base`, baked into the Docker image at build.
    Dockerfile at repo root.
 2. GPU 24 GB tier (4090/A5000 class) · workers min 0, max 3 ·
    container disk ≥ 20 GB.
-3. **Endpoint secrets** (because the voice is not in the public repo):
-   - `REF_AUDIO_URL` — https URL to your `reference.WAV` (private gist raw
-     URL, presigned S3, private HF resolve URL with token…)
-   - `REF_TEXT` — the exact transcript of the reference audio (or an https
-     URL to the .txt)
-4. Deploy → copy endpoint id → `export RUNPOD_TTS_ENDPOINT_ID=...`
+3. Deploy → copy endpoint id → `export RUNPOD_TTS_ENDPOINT_ID=...`
 
-If your fork is **private**, skip the secrets: commit
-`reference/reference.WAV` + `reference/reference.txt` instead — the image
-bakes them.
+The reference voice is committed and baked into the image. To swap voices
+without editing the repo, set `REF_AUDIO_URL` / `REF_TEXT` endpoint secrets —
+the handler prefers baked files but supports the override.
 
 ## Use
 

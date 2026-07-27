@@ -1,9 +1,3 @@
-# personal voice — NEVER commit to the public repo
-reference/reference.WAV
-reference/reference.txt
-reference/*.wav
-reference/*.WAV
-
 # local junk
 __pycache__/
 *.pyc
