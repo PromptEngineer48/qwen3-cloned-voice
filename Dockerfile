@@ -38,13 +38,15 @@ RUN pip install --no-cache-dir --no-deps . \
         pyloudnorm \
         huggingface_hub
 
-# Bake the model so cold start is load-from-disk only.
-RUN python -c "from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-TTS-12Hz-1.7B-Base')"
+# The model is intentionally NOT baked in: it adds ~4 GB, which pushes the image
+# past what a CI runner can build and makes every worker pull it. The handler
+# falls back to downloading from the hub on first use (~1-2 min once per cold
+# worker). Attach a network volume later if that cost matters.
 
 # Fail the build loudly rather than crash-looping at runtime.
 RUN python -c "import torch, runpod, soundfile, pyloudnorm, scipy; from qwen_tts import Qwen3TTSModel; print('imports OK, torch', torch.__version__)"
 
 COPY reference/ ./reference/
-COPY handler.py ./handler.py
+COPY rp_handler.py ./rp_handler.py
 
-CMD ["python", "-u", "/app/handler.py"]
+CMD ["python", "-u", "/app/rp_handler.py"]
