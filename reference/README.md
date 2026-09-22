@@ -1,6 +1,6 @@
 # Reference voice
 
-`reference.WAV` (11.7 s) + `reference.txt` (its exact transcript) are committed
+`reference.WAV` (26.1 s) + `reference.txt` (its exact transcript) are committed
 and baked into the worker image — the endpoint always speaks in this voice with
 zero per-request setup.
 
